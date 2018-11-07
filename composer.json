@@ -1,0 +1,20 @@
+{
+  "name": "audax/audax-press",
+  "description": "Framework Wordpress",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Rafael Dimas",
+      "email": "rafael.dimas@live.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Audax\\AudaxPress\\": "src"
+    }
+  },
+  "require": {
+    "php": ">=7.0.0",
+    "php-di/php-di": "^6.0"
+  }
+}
