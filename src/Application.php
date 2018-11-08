@@ -2,72 +2,166 @@
 
 namespace Audax\AudaxPress;
 
-use DI\Container;
-use DI\ContainerBuilder;
+use Audax\AudaxPress\Support\Config;
+use Audax\AudaxPress\Contract\Config as ConfigContract;
+use DirectoryIterator;
+use Illuminate\Container\Container;
+use RegexIterator;
 
 /**
  * Class Application
  *
  * @package Audax\AudaxPress
  */
-final class Application
+final class Application extends Container
 {
-    private $container;
-    private $defaultConfig = false;
+    protected $basePath = '';
 
-    public function init(array $config = [])
+    protected $configPath = '';
+
+    protected $publicPath = '';
+
+    protected $themesPath = '';
+
+    protected $bootstrapPath = '';
+
+    /**
+     * Application constructor.
+     *
+     * @param null $basePath
+     */
+    public function __construct($basePath = null)
     {
-        $settings = $this->parsedConfig($config);
+        if ($basePath) {
+            $this->setBasePath($basePath);
+        }
 
-        $container = $this->buildContainer($settings);
+        $this->registerBaseBindings();
 
-        $this->container($container);
+        $this->registerConfigBindings();
 
-        $this->handleServicesProviders();
+        $this->registerBaseServiceProviders();
 
         return $this;
     }
 
     /**
-     * @param Container|null $container
-     * @return Container
+     *
      */
-    public function container(Container $container = null)
+    protected function registerBaseBindings()
     {
-        if (!is_null($container)) {
-            $this->container = $container;
-        }
-        return $this->container;
-    }
-
-    private function parsedConfig(array $config)
-    {
-        return array_merge_recursive($this->getDefaultConfig(), $config);
-    }
-
-    private function getDefaultConfig()
-    {
-        return $this->defaultConfig ?: $this->defaultConfig = require_once __DIR__.'/config/default.php';
+        static::setInstance($this);
+        $this->instance('app', $this);
+        $this->instance(Container::class, $this);
     }
 
     /**
-     * @param array $settings
-     * @return \DI\Container
-     * @throws \Exception
+     *
      */
-    private function buildContainer(array $settings)
+    protected function registerConfigBindings()
     {
-        $containerBuilder = new ContainerBuilder();
-        $containerBuilder->addDefinitions($settings);
-        $container = $containerBuilder->build();
-        $container->set('app', $this);
-        return $container;
+        $configs = $this->configFilesName();
+
+        $configInstance = new Config($configs);
+
+        $this->instance('config', $configInstance);
+        $this->instance(Config::class, $configInstance);
+        $this->instance(ConfigContract::class, $configInstance);
     }
 
-    private function handleServicesProviders()
+    /**
+     * @return array
+     */
+    protected function configFilesName()
     {
-        (new HandleServiceProviders($this->container()->get('providers'), $this))
-            ->fireServices()
-            ->fireBoots();
+        $configFilesName = [];
+        $configsIterator = new RegexIterator(new DirectoryIterator($this->configPath()), "/\\.php\$/i");
+
+        /** @var DirectoryIterator $configFile */
+        foreach ($configsIterator as $configFile) {
+            $fileFullName = $this->configPath().DIRECTORY_SEPARATOR.$configFile->getFilename();
+            $configFilesName[$configFile->getBasename('.php')] = require_once $fileFullName;
+        }
+
+        return $configFilesName;
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    private function registerBaseServiceProviders()
+    {
+        $handleServiceProviders = new HandleServiceProviders();
+        $handleServiceProviders
+            ->setApp($this)
+            ->setServiceProviders($this->get('config')->get('app.providers'))
+            ->fire();
+    }
+
+    /**
+     * @param string $basePath
+     */
+    protected function setBasePath(string $basePath): void
+    {
+        $this->basePath = rtrim($basePath, '\/');
+
+        $this->bindPathsInContainer();
+    }
+
+    /**
+     *
+     */
+    protected function bindPathsInContainer()
+    {
+        $this->instance('path', $this->path());
+        $this->instance('path.base', $this->basePath());
+        $this->instance('path.config', $this->configPath());
+        $this->instance('path.public', $this->publicPath());
+        $this->instance('path.bootstrap', $this->bootstrapPath());
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public function path($path = '')
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'app'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public function basePath($path = '')
+    {
+        return $this->basePath.($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public function configPath($path = '')
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'config'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public function publicPath($path = '')
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'public'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public function bootstrapPath($path = '')
+    {
+        return $this->basePath.DIRECTORY_SEPARATOR.'bootstrap'.($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
 }
