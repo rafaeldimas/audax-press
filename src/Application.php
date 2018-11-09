@@ -40,7 +40,7 @@ final class Application extends Container
 
         $this->registerConfigBindings();
 
-        $this->registerBaseServiceProviders();
+        $this->registerServiceProviders();
 
         return $this;
     }
@@ -83,13 +83,30 @@ final class Application extends Container
             $configFilesName[$configFile->getBasename('.php')] = require_once $fileFullName;
         }
 
+        $configFilesName = $this->mergeDefaultsConfigFilesName($configFilesName);
+
         return $configFilesName;
+    }
+
+    protected function mergeDefaultsConfigFilesName(array $configs)
+    {
+        $configDir = __DIR__.'/config';
+        $configFilesName = [];
+        $configsIterator = new RegexIterator(new DirectoryIterator($configDir), "/\\.php\$/i");
+
+        /** @var DirectoryIterator $configFile */
+        foreach ($configsIterator as $configFile) {
+            $fileFullName = $configDir.DIRECTORY_SEPARATOR.$configFile->getFilename();
+            $configFilesName[$configFile->getBasename('.php')] = require_once $fileFullName;
+        }
+
+        return array_merge_recursive($configFilesName, $configs);
     }
 
     /**
      * @throws \ReflectionException
      */
-    private function registerBaseServiceProviders()
+    private function registerServiceProviders()
     {
         $handleServiceProviders = new HandleServiceProviders();
         $handleServiceProviders
