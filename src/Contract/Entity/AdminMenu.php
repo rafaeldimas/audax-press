@@ -1,6 +1,6 @@
 <?php
 
-namespace Audax\AudaxPress\Contract\Entity;
+namespace GrupoAudax\AudaxPress\Contract\Entity;
 
 interface AdminMenu
 {

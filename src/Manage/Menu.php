@@ -1,8 +1,8 @@
 <?php
 
-namespace Audax\AudaxPress\Manage;
+namespace GrupoAudax\AudaxPress\Manage;
 
-use Audax\AudaxPress\Contract\Manage\Menu as MenuContract;
+use GrupoAudax\AudaxPress\Contract\Manage\Menu as MenuContract;
 
 class Menu implements MenuContract
 {

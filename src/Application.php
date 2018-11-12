@@ -1,9 +1,9 @@
 <?php
 
-namespace Audax\AudaxPress;
+namespace GrupoAudax\AudaxPress;
 
-use Audax\AudaxPress\Support\Config;
-use Audax\AudaxPress\Contract\Config as ConfigContract;
+use GrupoAudax\AudaxPress\Support\Config;
+use GrupoAudax\AudaxPress\Contract\Config as ConfigContract;
 use DirectoryIterator;
 use Illuminate\Container\Container;
 use RegexIterator;
@@ -11,7 +11,7 @@ use RegexIterator;
 /**
  * Class Application
  *
- * @package Audax\AudaxPress
+ * @package GrupoAudax\AudaxPress
  */
 final class Application extends Container
 {

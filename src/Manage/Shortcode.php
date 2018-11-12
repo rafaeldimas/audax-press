@@ -1,8 +1,8 @@
 <?php
 
-namespace Audax\AudaxPress\Manage;
+namespace GrupoAudax\AudaxPress\Manage;
 
-use Audax\AudaxPress\Contract\Manage\Shortcode as ShortcodeContract;
+use GrupoAudax\AudaxPress\Contract\Manage\Shortcode as ShortcodeContract;
 
 class Shortcode implements ShortcodeContract
 {

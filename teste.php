@@ -2,4 +2,4 @@
 
 require_once 'vendor/autoload.php';
 
-$app = new \Audax\AudaxPress\Application(__DIR__.'/src');
+$app = new \GrupoAudax\AudaxPress\Application(__DIR__.'/src');

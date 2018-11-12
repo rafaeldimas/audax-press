@@ -1,8 +1,8 @@
 <?php
 
-namespace Audax\AudaxPress\Manage;
+namespace GrupoAudax\AudaxPress\Manage;
 
-use Audax\AudaxPress\Contract\Manage\Taxonomy as TaxonomyContract;
+use GrupoAudax\AudaxPress\Contract\Manage\Taxonomy as TaxonomyContract;
 
 class Taxonomy implements TaxonomyContract
 {

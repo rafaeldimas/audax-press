@@ -1,9 +1,9 @@
 <?php
 
-namespace Audax\AudaxPress\Support;
+namespace GrupoAudax\AudaxPress\Support;
 
-use Audax\AudaxPress\Application;
-use Audax\AudaxPress\Contract\ServiceProvider as ServiceProviderContract;
+use GrupoAudax\AudaxPress\Application;
+use GrupoAudax\AudaxPress\Contract\ServiceProvider as ServiceProviderContract;
 
 abstract class ServiceProvider implements ServiceProviderContract
 {

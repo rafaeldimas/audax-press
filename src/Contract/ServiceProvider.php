@@ -1,11 +1,11 @@
 <?php
 
-namespace Audax\AudaxPress\Contract;
+namespace GrupoAudax\AudaxPress\Contract;
 
 /**
  * Interface ServiceProvider
  *
- * @package Audax\AudaxPress\Contract
+ * @package GrupoAudax\AudaxPress\Contract
  *
  * @property $bindings
  * @property $singletons

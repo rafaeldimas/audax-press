@@ -1,6 +1,6 @@
 <?php
 
-namespace Audax\AudaxPress\Contract\Manage;
+namespace GrupoAudax\AudaxPress\Contract\Manage;
 
 interface Taxonomy
 {

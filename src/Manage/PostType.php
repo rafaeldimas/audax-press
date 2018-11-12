@@ -1,8 +1,8 @@
 <?php
 
-namespace Audax\AudaxPress\Manage;
+namespace GrupoAudax\AudaxPress\Manage;
 
-use Audax\AudaxPress\Contract\Manage\PostType as PostTypeContract;
+use GrupoAudax\AudaxPress\Contract\Manage\PostType as PostTypeContract;
 
 class PostType implements PostTypeContract
 {

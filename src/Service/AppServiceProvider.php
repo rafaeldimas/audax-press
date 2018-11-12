@@ -1,8 +1,8 @@
 <?php
 
-namespace Audax\AudaxPress\Service;
+namespace GrupoAudax\AudaxPress\Service;
 
-use Audax\AudaxPress\Support\ServiceProvider;
+use GrupoAudax\AudaxPress\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {

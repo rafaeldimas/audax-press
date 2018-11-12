@@ -1,8 +1,8 @@
 <?php
 
-namespace Audax\AudaxPress;
+namespace GrupoAudax\AudaxPress;
 
-use Audax\AudaxPress\Contract\ServiceProvider;
+use GrupoAudax\AudaxPress\Contract\ServiceProvider;
 use Illuminate\Container\Container;
 use InvalidArgumentException;
 use ReflectionClass;

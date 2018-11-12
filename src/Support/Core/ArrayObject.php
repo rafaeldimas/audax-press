@@ -1,6 +1,6 @@
 <?php
 
-namespace Audax\AudaxPress\Support\Core;
+namespace GrupoAudax\AudaxPress\Support\Core;
 
 use ArrayAccess;
 use ArrayIterator;

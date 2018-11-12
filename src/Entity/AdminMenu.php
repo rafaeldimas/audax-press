@@ -1,8 +1,8 @@
 <?php
 
-namespace Audax\AudaxPress\Entity;
+namespace GrupoAudax\AudaxPress\Entity;
 
-use Audax\AudaxPress\Contract\Entity\AdminMenu as AdminMenuContract;
+use GrupoAudax\AudaxPress\Contract\Entity\AdminMenu as AdminMenuContract;
 
 class AdminMenu implements AdminMenuContract
 {

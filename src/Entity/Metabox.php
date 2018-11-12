@@ -1,8 +1,8 @@
 <?php
 
-namespace Audax\AudaxPress\Entity;
+namespace GrupoAudax\AudaxPress\Entity;
 
-use Audax\AudaxPress\Contract\Entity\Metabox as MetaboxContract;
+use GrupoAudax\AudaxPress\Contract\Entity\Metabox as MetaboxContract;
 
 class Metabox implements MetaboxContract
 {

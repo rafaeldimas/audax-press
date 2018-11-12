@@ -1,8 +1,8 @@
 <?php
 
-namespace Audax\AudaxPress\Support;
+namespace GrupoAudax\AudaxPress\Support;
 
-use Audax\AudaxPress\Contract\Config as ConfigContract;
+use GrupoAudax\AudaxPress\Contract\Config as ConfigContract;
 use Illuminate\Config\Repository;
 
 class Config extends Repository implements ConfigContract
