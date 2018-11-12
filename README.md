@@ -7,7 +7,7 @@ Framework wordpress para projetos do Grupo Audax.
 ### Pré-requisitos
 
 * PHP ^7.1.3
-* [Composer] (https://getcomposer.org/)
+* [Composer](https://getcomposer.org/)
 
 ### Instalação
 
