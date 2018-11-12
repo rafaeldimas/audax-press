@@ -29,6 +29,7 @@ final class Application extends Container
      * Application constructor.
      *
      * @param null $basePath
+     * @throws \ReflectionException
      */
     public function __construct($basePath = null)
     {
@@ -41,14 +42,12 @@ final class Application extends Container
         $this->registerConfigBindings();
 
         $this->registerServiceProviders();
-
-        return $this;
     }
 
     /**
      *
      */
-    protected function registerBaseBindings()
+    protected function registerBaseBindings(): void
     {
         static::setInstance($this);
         $this->instance('app', $this);
@@ -58,7 +57,7 @@ final class Application extends Container
     /**
      *
      */
-    protected function registerConfigBindings()
+    protected function registerConfigBindings() : void
     {
         $configs = $this->configFilesName();
 
@@ -72,7 +71,7 @@ final class Application extends Container
     /**
      * @return array
      */
-    protected function configFilesName()
+    protected function configFilesName(): array
     {
         $configFilesName = [];
         $configsIterator = new RegexIterator(new DirectoryIterator($this->configPath()), "/\\.php\$/i");
@@ -88,7 +87,11 @@ final class Application extends Container
         return $configFilesName;
     }
 
-    protected function mergeDefaultsConfigFilesName(array $configs)
+    /**
+     * @param array $configs
+     * @return array
+     */
+    protected function mergeDefaultsConfigFilesName(array $configs): array
     {
         $configDir = __DIR__.'/config';
         $configFilesName = [];
@@ -106,7 +109,7 @@ final class Application extends Container
     /**
      * @throws \ReflectionException
      */
-    private function registerServiceProviders()
+    private function registerServiceProviders(): void
     {
         $handleServiceProviders = new HandleServiceProviders();
         $handleServiceProviders
@@ -128,7 +131,7 @@ final class Application extends Container
     /**
      *
      */
-    protected function bindPathsInContainer()
+    protected function bindPathsInContainer(): void
     {
         $this->instance('path', $this->path());
         $this->instance('path.base', $this->basePath());
@@ -141,7 +144,7 @@ final class Application extends Container
      * @param string $path
      * @return string
      */
-    public function path($path = '')
+    public function path($path = ''): string
     {
         return $this->basePath.DIRECTORY_SEPARATOR.'app'.($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
@@ -150,7 +153,7 @@ final class Application extends Container
      * @param string $path
      * @return string
      */
-    public function basePath($path = '')
+    public function basePath($path = ''): string
     {
         return $this->basePath.($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
@@ -159,7 +162,7 @@ final class Application extends Container
      * @param string $path
      * @return string
      */
-    public function configPath($path = '')
+    public function configPath($path = ''): string
     {
         return $this->basePath.DIRECTORY_SEPARATOR.'config'.($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
@@ -168,7 +171,7 @@ final class Application extends Container
      * @param string $path
      * @return string
      */
-    public function publicPath($path = '')
+    public function publicPath($path = ''): string
     {
         return $this->basePath.DIRECTORY_SEPARATOR.'public'.($path ? DIRECTORY_SEPARATOR.$path : $path);
     }
@@ -177,7 +180,7 @@ final class Application extends Container
      * @param string $path
      * @return string
      */
-    public function bootstrapPath($path = '')
+    public function bootstrapPath($path = ''): string
     {
         return $this->basePath.DIRECTORY_SEPARATOR.'bootstrap'.($path ? DIRECTORY_SEPARATOR.$path : $path);
     }

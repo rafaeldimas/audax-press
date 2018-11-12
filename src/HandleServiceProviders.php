@@ -14,14 +14,20 @@ class HandleServiceProviders
      */
     private $app;
 
+    /**
+     * @var string[]
+     */
     private $serviceProviders = [];
 
+    /**
+     * @var ServiceProvider[]
+     */
     private $serviceProvidersInstance = [];
 
     /**
      * @throws \ReflectionException
      */
-    public function fire()
+    public function fire(): void
     {
         foreach ($this->serviceProviders as $provider) {
             $this->register($provider);
@@ -31,12 +37,12 @@ class HandleServiceProviders
     /**
      * @param $provider
      * @param bool $force
-     * @return array|ServiceProvider
+     * @return ServiceProvider
      * @throws \ReflectionException
      */
-    public function register($provider, $force = false)
+    public function register($provider, $force = false): ServiceProvider
     {
-        if (($registered = $this->getProviderInstance($provider)) && ! $force) {
+        if (($registered = $this->getProviderInstance($provider)) && !$force) {
             return $registered;
         }
 
@@ -57,9 +63,9 @@ class HandleServiceProviders
 
     /**
      * @param $provider
-     * @return mixed
+     * @return ServiceProvider|null
      */
-    public function getProviderInstance($provider)
+    public function getProviderInstance($provider): ?ServiceProvider
     {
         $name = is_string($provider) ? $provider : get_class($provider);
 
@@ -68,17 +74,19 @@ class HandleServiceProviders
             if ($providerCurrent instanceof  $name) {
                 return $providerCurrent;
             }
-            return false;
-        }, false);
+            return null;
+        }, null);
     }
 
     /**
-     * @param $provider
+     * @param string|object $provider
      * @return ServiceProvider
      * @throws \ReflectionException
      */
-    private function resolveProvider($provider)
+    private function resolveProvider($provider): ServiceProvider
     {
+        $provider = is_string($provider) ? $provider : get_class($provider);
+
         if (!class_exists($provider)) {
             throw new InvalidArgumentException("Service Provider {$provider} not found");
         }
@@ -87,10 +95,18 @@ class HandleServiceProviders
                 sprintf('Service Provider %s not implements %s}', $provider, ServiceProvider::class)
             );
         }
-        return new $provider($this->app);
+
+        $providerInstance = new $provider($this->app);
+        $this->serviceProvidersInstance[] = $providerInstance;
+
+        return $providerInstance;
     }
 
-    protected function fireRegisters(ServiceProvider $provider)
+    /**
+     * @param ServiceProvider $provider
+     * @return HandleServiceProviders
+     */
+    protected function fireRegisters(ServiceProvider $provider): HandleServiceProviders
     {
         if (method_exists($provider, 'register')) {
             $provider->register();
@@ -98,25 +114,39 @@ class HandleServiceProviders
         return $this;
     }
 
-    protected function fireBindingsProperty(ServiceProvider $provider)
+    /**
+     * @param ServiceProvider $provider
+     * @return HandleServiceProviders
+     */
+    protected function fireBindingsProperty(ServiceProvider $provider): HandleServiceProviders
     {
         if (property_exists($provider, 'bindings')) {
             foreach ($provider->bindings as $key => $value) {
                 $this->app->bind($key, $value);
             }
         }
+        return $this;
     }
 
-    protected function fireSingletonsProperty(ServiceProvider $provider)
+    /**
+     * @param ServiceProvider $provider
+     * @return HandleServiceProviders
+     */
+    protected function fireSingletonsProperty(ServiceProvider $provider): HandleServiceProviders
     {
         if (property_exists($provider, 'singletons')) {
             foreach ($provider->singletons as $key => $value) {
                 $this->app->singleton($key, $value);
             }
         }
+        return $this;
     }
 
-    protected function fireBoots(ServiceProvider $provider)
+    /**
+     * @param ServiceProvider $provider
+     * @return HandleServiceProviders
+     */
+    protected function fireBoots(ServiceProvider $provider): HandleServiceProviders
     {
         if (method_exists($provider, 'boot')) {
             $this->app->call([$provider, 'boot']);
@@ -135,7 +165,7 @@ class HandleServiceProviders
     }
 
     /**
-     * @param array $serviceProviders
+     * @param string[] $serviceProviders
      * @return HandleServiceProviders
      */
     public function setServiceProviders(array $serviceProviders): HandleServiceProviders

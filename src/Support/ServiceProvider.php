@@ -7,6 +7,9 @@ use GrupoAudax\AudaxPress\Contract\ServiceProvider as ServiceProviderContract;
 
 abstract class ServiceProvider implements ServiceProviderContract
 {
+    /**
+     * @var Application 
+     */
     protected $app;
 
     public function __construct(Application $app)
