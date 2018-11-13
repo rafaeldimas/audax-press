@@ -4,7 +4,7 @@ namespace GrupoAudax\AudaxPress\Service;
 
 use GrupoAudax\AudaxPress\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class AudaxPressServiceProvider extends ServiceProvider
 {
     /**
      * @return mixed

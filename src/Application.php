@@ -73,12 +73,13 @@ final class Application extends Container
      */
     protected function configFilesName(): array
     {
+        $configDir = $this->configPath().DIRECTORY_SEPARATOR;
         $configFilesName = [];
         $configsIterator = new RegexIterator(new DirectoryIterator($this->configPath()), "/\\.php\$/i");
 
         /** @var DirectoryIterator $configFile */
         foreach ($configsIterator as $configFile) {
-            $fileFullName = $this->configPath().DIRECTORY_SEPARATOR.$configFile->getFilename();
+            $fileFullName = $configDir.$configFile->getFilename();
             $configFilesName[$configFile->getBasename('.php')] = require_once $fileFullName;
         }
 
@@ -93,7 +94,7 @@ final class Application extends Container
      */
     protected function mergeDefaultsConfigFilesName(array $configs): array
     {
-        $configDir = __DIR__.'/config';
+        $configDir = __DIR__.DIRECTORY_SEPARATOR.'config';
         $configFilesName = [];
         $configsIterator = new RegexIterator(new DirectoryIterator($configDir), "/\\.php\$/i");
 
