@@ -2,7 +2,7 @@
 
 namespace GrupoAudax\AudaxPress;
 
-use GrupoAudax\AudaxPress\Contract\ServiceProvider;
+use GrupoAudax\AudaxPress\Contract\Support\ServiceProvider;
 use Illuminate\Container\Container;
 use InvalidArgumentException;
 use ReflectionClass;

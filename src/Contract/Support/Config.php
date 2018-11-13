@@ -1,6 +1,6 @@
 <?php
 
-namespace GrupoAudax\AudaxPress\Contract;
+namespace GrupoAudax\AudaxPress\Contract\Support;
 
 interface Config {
     /**

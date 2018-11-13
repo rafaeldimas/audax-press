@@ -2,9 +2,11 @@
 
 namespace GrupoAudax\AudaxPress;
 
+use GrupoAudax\AudaxPress\Contract\Support\Path as PathContract;
 use GrupoAudax\AudaxPress\Support\Config;
-use GrupoAudax\AudaxPress\Contract\Config as ConfigContract;
+use GrupoAudax\AudaxPress\Contract\Support\Config as ConfigContract;
 use DirectoryIterator;
+use GrupoAudax\AudaxPress\Support\Path;
 use Illuminate\Container\Container;
 use RegexIterator;
 
@@ -15,33 +17,32 @@ use RegexIterator;
  */
 final class Application extends Container
 {
-    protected $basePath = '';
-
-    protected $configPath = '';
-
-    protected $publicPath = '';
-
-    protected $themesPath = '';
-
-    protected $bootstrapPath = '';
-
     /**
      * Application constructor.
      *
-     * @param null $basePath
+     * @param string|null $basePath
      * @throws \ReflectionException
      */
     public function __construct($basePath = null)
     {
-        if ($basePath) {
-            $this->setBasePath($basePath);
-        }
+        $this->registerBasePathBindings($basePath);
 
         $this->registerBaseBindings();
 
         $this->registerConfigBindings();
 
         $this->registerServiceProviders();
+    }
+
+    public function registerBasePathBindings($basePath)
+    {
+        $path = new Path();
+
+        $this->instance('path', $path);
+        $this->instance(Path::class, $path);
+        $this->instance(PathContract::class, $path);
+
+        if ($basePath) $path->setBasePath($basePath);
     }
 
     /**
@@ -120,34 +121,12 @@ final class Application extends Container
     }
 
     /**
-     * @param string $basePath
-     */
-    protected function setBasePath(string $basePath): void
-    {
-        $this->basePath = rtrim($basePath, '\/');
-
-        $this->bindPathsInContainer();
-    }
-
-    /**
-     *
-     */
-    protected function bindPathsInContainer(): void
-    {
-        $this->instance('path', $this->path());
-        $this->instance('path.base', $this->basePath());
-        $this->instance('path.config', $this->configPath());
-        $this->instance('path.public', $this->publicPath());
-        $this->instance('path.bootstrap', $this->bootstrapPath());
-    }
-
-    /**
      * @param string $path
      * @return string
      */
-    public function path($path = ''): string
+    public function appPath($path = ''): string
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'app'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return $this->get('path')->appPath($path);
     }
 
     /**
@@ -156,7 +135,7 @@ final class Application extends Container
      */
     public function basePath($path = ''): string
     {
-        return $this->basePath.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return $this->get('path')->basePath($path);
     }
 
     /**
@@ -165,7 +144,7 @@ final class Application extends Container
      */
     public function configPath($path = ''): string
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'config'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return $this->get('path')->configPath($path);
     }
 
     /**
@@ -174,7 +153,7 @@ final class Application extends Container
      */
     public function publicPath($path = ''): string
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'public'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return $this->get('path')->publicPath($path);
     }
 
     /**
@@ -183,6 +162,6 @@ final class Application extends Container
      */
     public function bootstrapPath($path = ''): string
     {
-        return $this->basePath.DIRECTORY_SEPARATOR.'bootstrap'.($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return $this->get('path')->bootstrapPath($path);
     }
 }

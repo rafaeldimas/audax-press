@@ -2,7 +2,7 @@
 
 namespace GrupoAudax\AudaxPress\Support;
 
-use GrupoAudax\AudaxPress\Contract\Config as ConfigContract;
+use GrupoAudax\AudaxPress\Contract\Support\Config as ConfigContract;
 use Illuminate\Config\Repository;
 
 class Config extends Repository implements ConfigContract

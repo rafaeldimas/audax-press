@@ -3,7 +3,7 @@
 namespace GrupoAudax\AudaxPress\Support;
 
 use GrupoAudax\AudaxPress\Application;
-use GrupoAudax\AudaxPress\Contract\ServiceProvider as ServiceProviderContract;
+use GrupoAudax\AudaxPress\Contract\Support\ServiceProvider as ServiceProviderContract;
 
 abstract class ServiceProvider implements ServiceProviderContract
 {
