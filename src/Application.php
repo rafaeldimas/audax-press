@@ -160,6 +160,15 @@ final class Application extends Container
      * @param string $path
      * @return string
      */
+    public function themesPath($path = ''): string
+    {
+        return $this->get('path')->themesPath($path);
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
     public function bootstrapPath($path = ''): string
     {
         return $this->get('path')->bootstrapPath($path);
